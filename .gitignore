@@ -7,3 +7,5 @@ Desktop.ini
 *.so
 *.egg
 *.egg-info
+# ide配置
+.vscode
