@@ -1,6 +1,9 @@
 ## jqData_use
 本地使用 `jqData`
 
+#### JQData说明书
+[JQData-本地量化数据说明书](https://www.joinquant.com/help/api/help?name=JQData 'JQData-本地量化数据说明书')
+
 #### 交易市场
 交易所|示例代码|证券名称
 --|:--:|--:

@@ -4,16 +4,16 @@ import sys, random, json, re
 sys.path.append('../util/')
 from jqdatasdk import *
 from util import Util
-from stock import Stock
+from stockBasic import StockBasic
 # 登录
 login = Util.login()
 if (login):
     print('已经登录')
     print(Util.queryCount())
     arr = ['futures']
-    # print(Stock.getAll(arr, []))
+    print(StockBasic.getAll(arr, []))
     # print(Stock.getSingle('000001.XSHE'))
-    print(Stock.getMembers('000016.XSHG'))
+    print(StockBasic.getMembers('000016.XSHG'))
 else:
     print('你还没有登录')
 
