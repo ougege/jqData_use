@@ -1,20 +1,22 @@
 
 // let isDev = process.env.NODE_ENV === 'development'
-let token = '' // 浏览器自用token
+let token = '5b6a9ba2b0fd73bb20667f2c0ecd0fbcd5359a44' // 浏览器自用token
 let host = 'http://test.api.kdkdcn.com/'
 let resourceHost = 'http://test.m.kdkdcn.com/'
 let amapKey = '296cf11950a45e3fa6adb06b018e62fa' // 高德地图的key
 let defaultCenter = [116.406315,39.908775]
+let mobile = '13396551860'
+let password = 'yanglu0811'
 let isDev = true
 let isTest = true
-let staticHost = 'http://192.168.5.100:8666/'
+let staticHost = 'https://dataapi.joinquant.com'
 if (isDev) {
-  staticHost = 'http://localhost:8666/'
+  staticHost = 'https://dataapi.joinquant.com'
 }
 if (isTest) {
-  staticHost = 'http://test.backservice.kdkdcn.com/'
+  staticHost = 'https://dataapi.joinquant.com'
 }
-let staticApi = `${staticHost}api/`
+let staticApi = `${staticHost}/apis`
 let config = {
   token: token,
   host: host,
@@ -22,6 +24,9 @@ let config = {
   amapKey: amapKey,
   staticHost: staticHost,
   defaultCenter: defaultCenter,
-  staticApi: staticApi
+  staticApi: staticApi,
+  mobile: mobile,
+  password: password
 }
-export {config}
+// export {config}
+module.exports = config

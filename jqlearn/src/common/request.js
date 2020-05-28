@@ -1,8 +1,7 @@
 import axios from 'axios'
 import { Message } from 'element-ui'
-import store from '../store'
+// import store from '../store'
 import router from '../router'
-import Core from "../../core/core"
 // import * as types from '../store/mutation-type'
 
 // 来源：axios拦截器接口配置与使用
@@ -20,7 +19,7 @@ axios.create({
 // 请求拦截器
 axios.interceptors.request.use(
   config => {
-    const token = Core.Data.getToken() || ''
+    const token = localStorage.getItem('jqToken') || ''
     if (token) { // 判断是否存在token，如果存在的话，则每个http header都加上token
       config.headers.token = token // 请求头加上token
     }
@@ -40,57 +39,6 @@ axios.interceptors.response.use(
       return Promise.resolve(response)
     } else {
       return Promise.reject(response)
-      // 对已经请求的axios请求401错误处理
-      // switch (response.data.code) {
-      //   // 500:服务错误
-      //   case 500:
-      //     // localStorage.clear()
-      //     // router.replace({
-      //     //   path: '/login'
-      //     // })
-      //     break
-      //   // 401:未登录
-      //   // 未登录则跳转登录页面,并携带当前路径
-      //   case 401:
-      //     localStorage.clear()
-      //     router.replace({
-      //       path: '/login'
-      //     })
-      //     break
-      //   // 403: token过期
-      //   // 登录过期对用户进行提示
-      //   // 清除本地token和清空vuex中token对象
-      //   case 403:
-      //     Message({
-      //       message: '登录过期, 请重新登录',
-      //       duration: 1000,
-      //       forbidClick: true
-      //     })
-      //     // localStorage.removeItem('token')
-      //     store.commit('userData', null)
-      //     setTimeout(() => {
-      //       router.replace({
-      //         path: '/login'
-      //       })
-      //     }, 1000)
-      //     break
-      //   // 404：请求不存在
-      //   case 404:
-      //     Message({
-      //       message: '网络请求不存在',
-      //       duration: 1500,
-      //       forbidClick: true
-      //     })
-      //     break
-      //   // 其他错误，直接抛出错误提示
-      //   default:
-      //     Message({
-      //       message: response.data.msg,
-      //       duration: 1500,
-      //       forbidClick: true
-      //     })
-      // }
-      // return Promise.reject(response)
     }
   },
   // 状态码非200的情况
@@ -104,9 +52,6 @@ axios.interceptors.response.use(
           localStorage.clear()
           router.replace({
             path: '/login',
-            // query: {
-            //   redirect: router.currentRoute.fullPath
-            // }
           })
           break
         // 401:未登录
@@ -115,37 +60,6 @@ axios.interceptors.response.use(
           localStorage.clear()
           router.replace({
             path: '/login',
-            // query: {
-            //   redirect: router.currentRoute.fullPath
-            // }
-          })
-          break
-        // 403: token过期
-        // 登录过期对用户进行提示
-        // 清除本地token和清空vuex中token对象
-        case 403:
-          Message({
-            message: '登录过期, 请重新登录',
-            duration: 1000,
-            forbidClick: true
-          })
-          // localStorage.removeItem('token')
-          store.commit('userData', null)
-          setTimeout(() => {
-            router.replace({
-              path: '/login',
-              // query: {
-              //   redirect: router.currentRoute.fullPath
-              // }
-            })
-          }, 1000)
-          break
-        // 404：请求不存在
-        case 404:
-          Message({
-            message: '网络请求不存在',
-            duration: 1500,
-            forbidClick: true
           })
           break
         // 其他错误，直接抛出错误提示
