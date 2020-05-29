@@ -9,6 +9,16 @@ const logger = require('koa-logger')
 const index = require('./routes/index')
 const users = require('./routes/users')
 
+// 引入utilFn
+const utilFn = require('./common/util')
+// 引入config
+const config = require('./common/config')
+// 引入api
+const api = require('./api')
+// 引入合约列表
+const forwardList = require('./common/forwardList')
+console.log(forwardList)
+
 // error handler
 onerror(app)
 
