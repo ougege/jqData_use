@@ -17,7 +17,20 @@ const config = require('./common/config')
 const api = require('./api')
 // 引入合约列表
 const forwardList = require('./common/forwardList')
-console.log(forwardList)
+// console.log(forwardList)
+let dateArr = ['2020-03-15', '2020-04-30']
+// 获取交易日期
+// api.getTradeDays(dateArr[0], dateArr[1]).then(res => {
+//   console.log(res)
+// }).catch(err => {
+//   console.log(err)
+// })
+// 获取剩余次数
+// api.getLastCount().then(res => {
+//   console.log(res)
+// }).catch(err => {
+//   console.log(err)
+// })
 
 // error handler
 onerror(app)
