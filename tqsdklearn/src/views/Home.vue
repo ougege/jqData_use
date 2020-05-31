@@ -7,17 +7,32 @@
 
 <script>
 // @ is an alias to /src
+// https://github.com/shinnytech/tqsdk-js#module_TQSDK..Tqsdk+initMdWebsocket
 import TQSDK from 'tqsdk'
 import HelloWorld from '@/components/HelloWorld.vue'
 
 export default {
-  name: 'Home',
-  components: {
-    HelloWorld
+  components: { HelloWorld },
+  data () {
+    return {}
   },
+  created () {},
+  destroyed () {},
   mounted () {
-    const tqsdk = new TQSDK()
-    console.log(tqsdk)
+    this.init()
+  },
+  computed: {},
+  watch: {},
+  methods: {
+    init () {
+      const tqsdk = new TQSDK() // 等价于 const tqsdk = new TQSDK()
+      tqsdk.on('ready', function () {
+      })
+      const quote = tqsdk.getQuote('SHFE.au2006')
+      const dt = quote.expire_datetime
+      console.log(quote)
+      console.log(dt)
+    }
   }
 }
 </script>
