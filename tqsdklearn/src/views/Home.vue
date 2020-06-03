@@ -8,8 +8,10 @@
 <script>
 // @ is an alias to /src
 // https://github.com/shinnytech/tqsdk-js#module_TQSDK..Tqsdk+initMdWebsocket
-import TQSDK from 'tqsdk'
+// import TQSDK from 'tqsdk'
+import tqsdk from '../common/tqsdk'
 import HelloWorld from '@/components/HelloWorld.vue'
+import { util } from '../common/util'
 
 export default {
   components: { HelloWorld },
@@ -25,13 +27,9 @@ export default {
   watch: {},
   methods: {
     init () {
-      const tqsdk = new TQSDK() // 等价于 const tqsdk = new TQSDK()
-      tqsdk.on('ready', function () {
-      })
-      const quote = tqsdk.getQuote('SHFE.au2006')
-      const dt = quote.expire_datetime
-      console.log(quote)
-      console.log(dt)
+      console.log(util)
+      // console.log(tqsdk.getQuote('SHFE.AU99'))
+      console.log(tqsdk.getQuotesByInput('jidan'))
     }
   }
 }
