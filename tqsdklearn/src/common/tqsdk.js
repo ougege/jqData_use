@@ -12,7 +12,11 @@ class CreateTqsdk {
       user_id: config.userId,
       password: config.password
     }
-    const tqsdk = new TQSDK({ autoInit: true })
+    const tqsdk = new TQSDK({
+      symbolsServerUrl: 'https://openmd.shinnytech.com/t/md/symbols/latest.json',
+      wsQuoteUrl: 'wss://openmd.shinnytech.com/t/md/front/mobile',
+      autoInit: true
+    })
     tqsdk.on('ready', function () {
       Bus.$emit('TqsdkIsReady', tqsdk)
     })

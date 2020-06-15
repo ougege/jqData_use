@@ -34,8 +34,8 @@ export default {
     init (tqsdk) {
       console.log(util)
       console.log(createTqsdk)
-      console.log(tqsdk.getQuotesByInput('huangjin'))
-      console.log(tqsdk.getKlines('SHFE.au2012', 10))
+      console.log(tqsdk.getQuotesByInput('pingguo'))
+      // console.log(tqsdk.getKlines('SHFE.au2012', 10))
     },
     getBrokers (tqsdk, brokers) {
       console.log(tqsdk)
