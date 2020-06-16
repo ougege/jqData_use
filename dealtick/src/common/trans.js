@@ -1,4 +1,4 @@
-const csvFilePath = './DCE.jd2007.csv'
+const csvFilePath = '../data/DCE.jd2007.csv'
 const csv = require('csvtojson')
 const util = require('./util')
 var fs = require('fs')
@@ -22,7 +22,7 @@ csv()
         }
     }
     // console.log(str)
-    fs.writeFile('./DCE.jd2007.json', JSON.stringify(wholeArr), 'utf-8', function (err) {
+    fs.writeFile('../data/DCE.jd2007.json', JSON.stringify(wholeArr), 'utf-8', function (err) {
         if (err) {
             return console.log(err)
         }
