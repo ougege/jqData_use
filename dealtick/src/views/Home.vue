@@ -10,8 +10,9 @@
 </template>
 
 <script>
-import * as api from '../api'
-import { timeCut } from '../common/timeConfig'
+// import * as api from '../api'
+import axios from '../common/request'
+const timeConfig = require('../common/timeConfig')
 const util = require('../common/util')
 export default {
   name: 'Home',
@@ -27,16 +28,26 @@ export default {
   },
   methods: {
     getList () {
+      // const that = this
+      for (let k = 0; k < timeConfig.tradeDay.length; k++) {
+        const item = timeConfig.tradeDay[k]
+        const url = 'static/data/DCE.jd2007.' + item + '.json'
+        this.commonGetData(url, item)
+      }
+    },
+    // commonGetData (url)
+    commonGetData (url, item) {
       const that = this
       const params = {}
-      api.getDCEJd2007Data(params).then(res => {
+      axios.get(url, { params }).then(response => {
+        const res = response.data
         // tick说明 @amount:成交额, @ask_price1:卖一价, @ask_volume1:卖一量,
         // @bid_price1:买一价, @bid_volume1: 买一量, @heigest:当日最高价, @last_price: 最新价
         // @lowest: 当日最低价, @open_interest:持仓量, @volume:成交量
-        const currentDate = (res[0].datetime).split(' ')[0]
-        const timeObj = that.joinFixedTime(currentDate)
         let askObj = { volume1: 0, volume2: 0, volume3: 0, volume4: 0 }
         let bidObj = { volume1: 0, volume2: 0, volume3: 0, volume4: 0 }
+        const currentDate = (res[0].datetime).split(' ')[0]
+        const timeObj = that.joinFixedTime(currentDate)
         for (let i = 0; i < res.length; i++) {
           const resObj = res[i]
           const tempObjSecond = util.newTimeStamp(resObj.datetime)
@@ -65,10 +76,10 @@ export default {
         // const totalData = { time1Ask, time1Bid }
         askObj = util.calAskBidPercent(askObj)
         bidObj = util.calAskBidPercent(bidObj)
+        console.log(item)
         console.log(askObj)
         console.log(bidObj)
       }).catch(err => {
-        // console.log(err)
         that.$message.error(err.data.msg)
       })
     },
@@ -76,7 +87,7 @@ export default {
     joinFixedTime (currentDate) {
       let idx = 1
       const obj = {}
-      timeCut.forEach(item => {
+      timeConfig.timeCut.forEach(item => {
         obj['time' + idx + 'Start'] = util.newTimeStamp(currentDate + item.hourStart)
         obj['time' + idx + 'End'] = util.newTimeStamp(currentDate + item.hourEnd)
         idx++
