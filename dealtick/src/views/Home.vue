@@ -11,6 +11,8 @@
 
 <script>
 import * as api from '../api'
+import { timeCut } from '../common/timeConfig'
+const util = require('../common/util')
 export default {
   name: 'Home',
   data () {
@@ -28,11 +30,58 @@ export default {
       const that = this
       const params = {}
       api.getDCEJd2007Data(params).then(res => {
-        console.log(res)
+        // tick说明 @amount:成交额, @ask_price1:卖一价, @ask_volume1:卖一量,
+        // @bid_price1:买一价, @bid_volume1: 买一量, @heigest:当日最高价, @last_price: 最新价
+        // @lowest: 当日最低价, @open_interest:持仓量, @volume:成交量
+        const currentDate = (res[0].datetime).split(' ')[0]
+        const timeObj = that.joinFixedTime(currentDate)
+        let askObj = { volume1: 0, volume2: 0, volume3: 0, volume4: 0 }
+        let bidObj = { volume1: 0, volume2: 0, volume3: 0, volume4: 0 }
+        for (let i = 0; i < res.length; i++) {
+          const resObj = res[i]
+          const tempObjSecond = util.newTimeStamp(resObj.datetime)
+          // debugger
+          // 时间段09:00-10:00
+          if (timeObj.time1Start < tempObjSecond && timeObj.time1End > tempObjSecond) {
+            askObj.volume1 += Number(resObj.DCE.jd2007.ask_volume1)
+            bidObj.volume1 += Number(resObj.DCE.jd2007.bid_volume1)
+          }
+          // 时间段10:00-11:00
+          if (timeObj.time2Start < tempObjSecond && timeObj.time2End > tempObjSecond) {
+            askObj.volume2 += Number(resObj.DCE.jd2007.ask_volume1)
+            bidObj.volume2 += Number(resObj.DCE.jd2007.bid_volume1)
+          }
+          // 时间段11:00-14:00
+          if (timeObj.time3Start < tempObjSecond && timeObj.time3End > tempObjSecond) {
+            askObj.volume3 += Number(resObj.DCE.jd2007.ask_volume1)
+            bidObj.volume3 += Number(resObj.DCE.jd2007.bid_volume1)
+          }
+          // 时间段14:00-15:00
+          if (timeObj.time4Start < tempObjSecond && timeObj.time4End > tempObjSecond) {
+            askObj.volume4 += Number(resObj.DCE.jd2007.ask_volume1)
+            bidObj.volume4 += Number(resObj.DCE.jd2007.bid_volume1)
+          }
+        }
+        // const totalData = { time1Ask, time1Bid }
+        askObj = util.calAskBidPercent(askObj)
+        bidObj = util.calAskBidPercent(bidObj)
+        console.log(askObj)
+        console.log(bidObj)
       }).catch(err => {
         // console.log(err)
         that.$message.error(err.data.msg)
       })
+    },
+    // 传入timeCut对象,生成符合固定时间段对象
+    joinFixedTime (currentDate) {
+      let idx = 1
+      const obj = {}
+      timeCut.forEach(item => {
+        obj['time' + idx + 'Start'] = util.newTimeStamp(currentDate + item.hourStart)
+        obj['time' + idx + 'End'] = util.newTimeStamp(currentDate + item.hourEnd)
+        idx++
+      })
+      return obj
     }
   }
 }

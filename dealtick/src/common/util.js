@@ -1,5 +1,5 @@
 // import { type } from './type'
-import { config } from './config'
+// import { config } from './config'
 const type = require('./type')
 
 const util = {
@@ -186,8 +186,20 @@ const util = {
   },
   // 获取token
   getToken () {
-    const token = config.appToken || localStorage.getItem('access_token')
+    // const token = config.appToken || localStorage.getItem('access_token')
+    const token = localStorage.getItem('access_token')
     return token
+  },
+  // 传入一个买卖obj，计算百分比
+  calAskBidPercent (obj) {
+    let sum = 0
+    for (const i in obj) {
+      sum += obj[i]
+    }
+    for (const j in obj) {
+      obj[j] = obj[j] / sum
+    }
+    return obj
   }
 }
 

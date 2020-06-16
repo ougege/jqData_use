@@ -1,10 +1,10 @@
-const csvFilePath = '../../static/data/DCE.jd2007.csv'
+const csvFilePath = '../../public/static/data/DCE.jd2007.csv'
 const csv = require('csvtojson')
 const util = require('./util')
 var fs = require('fs')
 
 let startDate = '2020-06-11 08:59'
-let endDate = '2020-06-12 15:01'
+let endDate = '2020-06-11 15:01'
 let startSecond = util.newTimeStamp(startDate)
 let endSecond = util.newTimeStamp(endDate)
 // let test = '2019-07-26 18:34:07.000000000'
@@ -23,7 +23,7 @@ csv()
     }
     // let newStr = 'const DCE2007 = ' + JSON.stringify(wholeArr) + ';' + 'export { DCE2007 }'
     // console.log(str)
-    fs.writeFile('../../static/data/DCE.jd2007.json', JSON.stringify(wholeArr), 'utf-8', function (err) {
+    fs.writeFile('../../public/static/data/DCE.jd2007.json', JSON.stringify(wholeArr), 'utf-8', function (err) {
         if (err) {
             return console.log(err)
         }
