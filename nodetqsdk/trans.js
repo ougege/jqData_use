@@ -10,22 +10,19 @@ let endSecond = util.newTimeStamp(endDate)
 let test = '2019-07-26 18:34:07.000000000'
 let testSecond = util.newTimeStamp(test)
 
-console.log(startSecond)
-console.log(endSecond)
-console.log(testSecond)
 csv()
 .fromFile(csvFilePath)
 .then((jsonObj) => {
-    let str = ''
+    let wholeArr = []
     for (let i = 0; i < jsonObj.length; i++) {
         let tempObj = jsonObj[i]
         let tempSecond = util.newTimeStamp(tempObj.datetime)
         if (tempSecond > startSecond && tempSecond < endSecond) {
-            str += JSON.stringify(tempObj) + ','
+            wholeArr.push(tempObj)
         }
     }
     // console.log(str)
-    fs.writeFile('./DCE.jd2007.json', str, 'utf-8', function (err) {
+    fs.writeFile('./DCE.jd2007.json', JSON.stringify(wholeArr), 'utf-8', function (err) {
         if (err) {
             return console.log(err)
         }
