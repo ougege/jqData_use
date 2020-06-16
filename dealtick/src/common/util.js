@@ -1,10 +1,11 @@
 // import { type } from './type'
+import { config } from './config'
 const type = require('./type')
 
 const util = {
   // 浅拷贝
   shallowCopy (obj) {
-    if (type['isNull'](obj)) {
+    if (type.isNull(obj)) {
       return null
     } else {
       return Object.create(
@@ -14,12 +15,12 @@ const util = {
   },
   // 深拷贝
   deepCopy (obj) {
-    let target = {}
-    if (type['isNull'](obj) || typeof obj !== 'object') {
+    const target = {}
+    if (type.isNull(obj) || typeof obj !== 'object') {
       return obj
     }
     // 不要使用Object.keys遍历:不遍历可枚举的原型链属性
-    for (let key in obj) {
+    for (const key in obj) {
       if (Object.prototype.hasOwnProperty.call(obj, key)) {
         if (typeof obj[key] === 'object') {
           target[key] = this.deepCopy(obj[key])
@@ -32,8 +33,8 @@ const util = {
   },
   // 数组去重:不带id普通数组去重;带id，数组对象去重
   arrDuplicateRemove (arr, id) {
-    let temp = []
-    let idArr = []
+    const temp = []
+    const idArr = []
     if (!id) {
       arr.forEach(item => {
         if (!temp.includes(item)) {
@@ -52,7 +53,7 @@ const util = {
   },
   // 数组删除某项值
   arrRemoveByValue (arr, value, attr) {
-    if (!type['isArray'](arr)) {
+    if (!type.isArray(arr)) {
       throw new Error('必须是数组')
     } else {
       // 不带attr，删除值;
@@ -99,8 +100,8 @@ const util = {
   // yyyy/MM/dd hh:mm:ss
   dateFormat (dateIn, fmt) {
     if (!fmt) return false
-    let newDate = type['isDate'](dateIn) ? dateIn : new Date(dateIn)
-    let o = {
+    const newDate = type.isDate(dateIn) ? dateIn : new Date(dateIn)
+    const o = {
       'y+': newDate.getFullYear(), // 年份
       'M+': this.addZero(newDate.getMonth() + 1), // 月份
       'd+': this.addZero(newDate.getDate()), // 某一天
@@ -108,7 +109,7 @@ const util = {
       'm+': this.addZero(newDate.getMinutes()), // 分钟
       's+': this.addZero(newDate.getSeconds()) // 秒
     }
-    for (let i in o) {
+    for (const i in o) {
       if (new RegExp('(' + i + ')').test(fmt)) {
         fmt = fmt.replace(RegExp.$1, o[i])
       }
@@ -120,21 +121,21 @@ const util = {
     if (!dateIn) {
       return new Date().getTime()
     } else {
-      let newDate = type['isDate'](dateIn) ? dateIn : new Date(dateIn)
+      const newDate = type.isDate(dateIn) ? dateIn : new Date(dateIn)
       return newDate.getTime()
     }
   },
   // 生成独一无二的字符串:字符串转32进制
   createUniqueString () {
-    let timestamp = this.newTimeStamp()
-    let randomNum = parseInt((1 + Math.random()) * 65536) + ''
+    const timestamp = this.newTimeStamp()
+    const randomNum = parseInt((1 + Math.random()) * 65536) + ''
     return (+(timestamp + randomNum)).toString(32)
   },
   // 生成UUID
   generateUUID () {
     let d = this.newTimeStamp()
-    let uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-      let r = (d + Math.random() * 16) % 16 | 0
+    const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+      const r = (d + Math.random() * 16) % 16 | 0
       d = Math.floor(d / 16)
       return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16)
     })
@@ -152,8 +153,8 @@ const util = {
   },
   // 匹配url的某个query值:无window对象则不可用
   getQueryStringByName (name) {
-    let reg = new RegExp('(^|&)' + name + '=(\\w+|$)', 'i')
-    let r = window.location.search.substr(1).match(reg)
+    const reg = new RegExp('(^|&)' + name + '=(\\w+|$)', 'i')
+    const r = window.location.search.substr(1).match(reg)
     let context = ''
     if (r !== null) {
       context = r[2]
@@ -162,9 +163,9 @@ const util = {
   },
   // 参数去空
   paramsRemoveNull (obj) {
-    if (type['isObject'](obj)) {
-      for (let item in obj) {
-        if (type['isUndefined'](obj[item]) || type['isNull'](obj[item])) {
+    if (type.isObject(obj)) {
+      for (const item in obj) {
+        if (type.isUndefined(obj[item]) || type.isNull(obj[item])) {
           delete obj[item]
         }
       }
@@ -175,14 +176,19 @@ const util = {
   },
   // api请求时，给params动态赋值
   objectAddAttr (obj, value, attr) {
-    if (type['isObject'](obj) && type['isString'](attr) && value !== null) {
-      let test = {}
+    if (type.isObject(obj) && type.isString(attr) && value !== null) {
+      const test = {}
       test[attr] = value
       Object.assign(obj, test)
     } else {
       throw new Error('参数有误')
     }
   },
+  // 获取token
+  getToken () {
+    const token = config.appToken || localStorage.getItem('access_token')
+    return token
+  }
 }
 
 module.exports = util
