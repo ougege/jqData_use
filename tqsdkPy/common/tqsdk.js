@@ -1,6 +1,7 @@
 import TQSDK from 'tqsdk'
 import Bus from './eventBus'
-import { config } from './config'
+// import { config } from './config'
+const config = require('./config')
 class CreateTqsdk {
   constructor () {
     this.init()

@@ -31,4 +31,5 @@ const config = {
   amapKey: amapKey,
   account: account
 }
-export { config }
+// export { config }
+module.exports = config

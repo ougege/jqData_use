@@ -1,6 +1,6 @@
 import axios from 'axios'
 // const util = require('./util')
-import { config } from './config'
+const config = require('./config')
 const utilConfig = config
 // import * as types from '../store/mutation-type'
 
