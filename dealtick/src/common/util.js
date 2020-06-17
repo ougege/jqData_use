@@ -197,7 +197,7 @@ const util = {
       sum += obj[i]
     }
     for (const j in obj) {
-      obj[j] = obj[j] / sum
+      obj[j] = (obj[j] / sum).toFixed(4)
     }
     return obj
   }

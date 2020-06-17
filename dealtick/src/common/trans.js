@@ -7,8 +7,8 @@ var fs = require('fs')
 csv()
 .fromFile(csvFilePath)
 .then((jsonObj) => {
-    let wholeArr = []
     timeConfig.tradeDay.forEach(item => {
+        let wholeArr = []
         let startDate = item + ' 08:59'
         let endDate = item + ' 15:01'
         let startSecond = util.newTimeStamp(startDate)

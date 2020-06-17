@@ -28,19 +28,20 @@ export default {
   },
   methods: {
     getList () {
-      // const that = this
-      for (let k = 0; k < timeConfig.tradeDay.length; k++) {
+      const that = this
+      for (var k = 0; k < timeConfig.tradeDay.length; k++) {
         const item = timeConfig.tradeDay[k]
         const url = 'static/data/DCE.jd2007.' + item + '.json'
-        this.commonGetData(url, item)
+        that.commonGetData(url, item)
       }
     },
     // commonGetData (url)
     commonGetData (url, item) {
       const that = this
       const params = {}
-      axios.get(url, { params }).then(response => {
+      axios.get(url, { params }).then(function (response) {
         const res = response.data
+        // 可以抓取tick移动到某个价位，成交量突然放大
         // tick说明 @amount:成交额, @ask_price1:卖一价, @ask_volume1:卖一量,
         // @bid_price1:买一价, @bid_volume1: 买一量, @heigest:当日最高价, @last_price: 最新价
         // @lowest: 当日最低价, @open_interest:持仓量, @volume:成交量
@@ -73,12 +74,13 @@ export default {
             bidObj.volume4 += Number(resObj.DCE.jd2007.bid_volume1)
           }
         }
-        // const totalData = { time1Ask, time1Bid }
         askObj = util.calAskBidPercent(askObj)
         bidObj = util.calAskBidPercent(bidObj)
+        const compareResult = that.compareAskBid(askObj, bidObj)
         console.log(item)
-        console.log(askObj)
-        console.log(bidObj)
+        console.log('卖 ', askObj)
+        console.log('买 ', bidObj)
+        console.log(compareResult)
       }).catch(err => {
         that.$message.error(err.data.msg)
       })
@@ -93,6 +95,18 @@ export default {
         idx++
       })
       return obj
+    },
+    // 比较买卖盘比例,简单标记‘卖', '买'
+    compareAskBid (askObj, bidObj) {
+      const arr = []
+      for (let d = 0; d < new Array(4).length; d++) {
+        if (Number(askObj['volume' + (d + 1)]) > Number(bidObj['volume' + (d + 1)])) {
+          arr.push('卖')
+        } else {
+          arr.push('买')
+        }
+      }
+      return arr
     }
   }
 }
