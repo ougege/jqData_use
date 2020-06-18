@@ -14,3 +14,16 @@
 上期所|'AU9999.XSGE'|黄金主力合约|
 郑商所|'CY8888.XZCE'|棉纱期货指数|
 上海能源交易所|'SC9999.XINE'|原油主力合约|
+
+#### 使用
+```SHELL
+# 获取区间交易日期
+https://quant.pobo.net.cn/main#/strategy/editor/52976/0
+# 获取日期对应主力合约
+https://quant.pobo.net.cn/main#/strategy/editor/54126/0
+# 获取全市场期货合约列表
+https://quant.pobo.net.cn/main#/strategy/editor/54129/0
+# tqsdkPy 下载某个合约所有数据
+# dealtick/src/common/trans.js 截取并存储每个交易日的json
+# dealtick vue项目请求json并计算出'买卖信息'
+```
