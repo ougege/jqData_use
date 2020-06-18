@@ -3,9 +3,9 @@ const util = require('./util')
 const timeConfig = require('./timeConfig')
 var fs = require('fs')
 
-for (let codeName in timeConfig.mainCodeList) {
+for (let codeName in timeConfig.nodeMainCodeList) {
     let csvFilePath = '../../public/static/data/' + codeName + '.csv'
-    let days = timeConfig.mainCodeList[codeName]
+    let days = timeConfig.nodeMainCodeList[codeName]
     csv()
     .fromFile(csvFilePath)
     .then((jsonObj) => {

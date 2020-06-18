@@ -1,7 +1,7 @@
 ## jqData_use
 本地使用 `jqData`
 
-#### JQData说明书
+#### 文档说明
 [JQData-本地量化数据说明书](https://www.joinquant.com/help/api/help?name=JQData 'JQData-本地量化数据说明书')
 [Tqsdk文档](https://doc.shinnytech.com/tqsdk/latest/ 'Tqsdk文档')
 [真格文档](https://quant.pobo.net.cn/doc?name=api '真格文档')
@@ -19,16 +19,17 @@
 
 #### 使用
 ```SHELL
-# csv和json需前往比特球-天勤数据下载
-# 获取区间交易日期
+# tqsdk 下载某个合约所有月份数据, 已保存csv需前往比特球-天勤数据下载
+# python获取区间交易日期
 https://quant.pobo.net.cn/main#/strategy/editor/52976/0
-# 获取日期对应主力合约
+# python获取日期对应主力合约
 https://quant.pobo.net.cn/main#/strategy/editor/54126/0
-# 获取全市场期货合约列表
+# python获取全市场期货合约列表
 https://quant.pobo.net.cn/main#/strategy/editor/54129/0
-# tqsdkPy 下载某个合约所有数据
-# dealtick/src/common/trans.js 截取并存储每个交易日的json
-# dealtick vue项目请求json并计算出'买卖信息'
+# dealtick/src/common/trans.js node截取并存储每个交易日对应主力合约的json
+# 已保存json需前往比特球-天勤数据下载
+# dealtick vue项目请求所有json并根据策略计算出'买卖标记'
+# 将标记导入tqsdk，进行回测
 ```
 
 #### 常见问题

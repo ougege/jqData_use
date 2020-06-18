@@ -29,62 +29,69 @@ export default {
   methods: {
     getList () {
       const that = this
-      for (var k = 0; k < timeConfig.tradeDay.length; k++) {
-        const item = timeConfig.tradeDay[k]
-        const url = 'static/data/DCE.jd2007.' + item + '.json'
-        that.commonGetData(url, item)
-      }
-    },
-    // commonGetData (url)
-    commonGetData (url, item) {
-      const that = this
-      const params = {}
-      axios.get(url, { params }).then(function (response) {
-        const res = response.data
-        // 可以抓取tick移动到某个价位，成交量突然放大
-        // tick说明 @amount:成交额, @ask_price1:卖一价, @ask_volume1:卖一量,
-        // @bid_price1:买一价, @bid_volume1: 买一量, @heigest:当日最高价, @last_price: 最新价
-        // @lowest: 当日最低价, @open_interest:持仓量, @volume:成交量
-        let askObj = { volume1: 0, volume2: 0, volume3: 0, volume4: 0 }
-        let bidObj = { volume1: 0, volume2: 0, volume3: 0, volume4: 0 }
-        const currentDate = (res[0].datetime).split(' ')[0]
-        const timeObj = that.joinFixedTime(currentDate)
-        for (let i = 0; i < res.length; i++) {
-          const resObj = res[i]
-          const tempObjSecond = util.newTimeStamp(resObj.datetime)
-          // debugger
-          // 时间段09:00-10:00
-          if (timeObj.time1Start < tempObjSecond && timeObj.time1End > tempObjSecond) {
-            askObj.volume1 += Number(resObj.DCE.jd2007.ask_volume1)
-            bidObj.volume1 += Number(resObj.DCE.jd2007.bid_volume1)
-          }
-          // 时间段10:00-11:00
-          if (timeObj.time2Start < tempObjSecond && timeObj.time2End > tempObjSecond) {
-            askObj.volume2 += Number(resObj.DCE.jd2007.ask_volume1)
-            bidObj.volume2 += Number(resObj.DCE.jd2007.bid_volume1)
-          }
-          // 时间段11:00-14:00
-          if (timeObj.time3Start < tempObjSecond && timeObj.time3End > tempObjSecond) {
-            askObj.volume3 += Number(resObj.DCE.jd2007.ask_volume1)
-            bidObj.volume3 += Number(resObj.DCE.jd2007.bid_volume1)
-          }
-          // 时间段14:00-15:00
-          if (timeObj.time4Start < tempObjSecond && timeObj.time4End > tempObjSecond) {
-            askObj.volume4 += Number(resObj.DCE.jd2007.ask_volume1)
-            bidObj.volume4 += Number(resObj.DCE.jd2007.bid_volume1)
-          }
+      const promiseArr = []
+      for (const codeName in timeConfig.mainCodeList) {
+        const days = timeConfig.mainCodeList[codeName]
+        for (var k = 0; k < days.length; k++) {
+          const url = 'static/data/' + codeName + '.' + days[k] + '.json'
+          const codeNameArr = codeName.split('.')
+          promiseArr.push(
+            new Promise(function (resolve, reject) {
+              const params = {}
+              axios.get(url, { params }).then(response => {
+                const res = response.data
+                // 可以抓取tick移动到某个价位，成交量突然放大
+                // tick说明 @amount:成交额, @ask_price1:卖一价, @ask_volume1:卖一量,
+                // @bid_price1:买一价, @bid_volume1: 买一量, @heigest:当日最高价, @last_price: 最新价
+                // @lowest: 当日最低价, @open_interest:持仓量, @volume:成交量
+                let askObj = { volume1: 0, volume2: 0, volume3: 0, volume4: 0 }
+                let bidObj = { volume1: 0, volume2: 0, volume3: 0, volume4: 0 }
+                const currentDate = (res[0].datetime).split(' ')[0]
+                const timeObj = that.joinFixedTime(currentDate)
+                for (let i = 0; i < res.length; i++) {
+                  const resObj = res[i]
+                  const tempObjSecond = util.newTimeStamp(resObj.datetime)
+                  // debugger
+                  // 时间段09:00-10:00
+                  if (timeObj.time1Start < tempObjSecond && timeObj.time1End > tempObjSecond) {
+                    askObj.volume1 += Number(resObj[codeNameArr[0]][codeNameArr[1]].ask_volume1)
+                    bidObj.volume1 += Number(resObj[codeNameArr[0]][codeNameArr[1]].bid_volume1)
+                  }
+                  // 时间段10:00-11:00
+                  if (timeObj.time2Start < tempObjSecond && timeObj.time2End > tempObjSecond) {
+                    askObj.volume2 += Number(resObj[codeNameArr[0]][codeNameArr[1]].ask_volume1)
+                    bidObj.volume2 += Number(resObj[codeNameArr[0]][codeNameArr[1]].bid_volume1)
+                  }
+                  // 时间段11:00-14:00
+                  if (timeObj.time3Start < tempObjSecond && timeObj.time3End > tempObjSecond) {
+                    askObj.volume3 += Number(resObj[codeNameArr[0]][codeNameArr[1]].ask_volume1)
+                    bidObj.volume3 += Number(resObj[codeNameArr[0]][codeNameArr[1]].bid_volume1)
+                  }
+                  // 时间段14:00-15:00
+                  if (timeObj.time4Start < tempObjSecond && timeObj.time4End > tempObjSecond) {
+                    askObj.volume4 += Number(resObj[codeNameArr[0]][codeNameArr[1]].ask_volume1)
+                    bidObj.volume4 += Number(resObj[codeNameArr[0]][codeNameArr[1]].bid_volume1)
+                  }
+                }
+                askObj = util.calAskBidPercent(askObj)
+                bidObj = util.calAskBidPercent(bidObj)
+                const compareResult = that.compareAskBid(askObj, bidObj)
+                const dateAndCode = currentDate + '.' + codeNameArr[1]
+                const wrapObj = { dateAndCode, askObj, bidObj, compareResult }
+                resolve(wrapObj)
+              }).catch(err => {
+                reject(err)
+                that.$message.error(err.data.msg)
+              })
+            })
+          )
         }
-        askObj = util.calAskBidPercent(askObj)
-        bidObj = util.calAskBidPercent(bidObj)
-        const compareResult = that.compareAskBid(askObj, bidObj)
-        console.log(item)
-        console.log('卖 ', askObj)
-        console.log('买 ', bidObj)
-        console.log(compareResult)
-      }).catch(err => {
-        that.$message.error(err.data.msg)
+      }
+      Promise.all(promiseArr).then(function (res) {
+        console.log(res)
       })
     },
+
     // 传入timeCut对象,生成符合固定时间段对象
     joinFixedTime (currentDate) {
       let idx = 1
