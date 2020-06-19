@@ -129,12 +129,13 @@ export default {
     guess (arr) {
       const that = this
       const newArr = []
-      for (let i = 0; i < arr.length; i++) {
-        const dayObj = arr[i]
+      for (let i = 0; i < arr.length - 1; i++) {
+        const todayObj = arr[i]
+        const tomorrowObj = arr[i + 1]
         // 每日第一阶段成交萎靡时，隔日反向操作
-        if (Number(dayObj.volumeObj.volume1) < 0.1000) {
-          const date = dayObj.dateAndCode.split('.')[0]
-          const action = dayObj.compareResult[0] === '买' ? '卖' : '买'
+        if (Number(todayObj.volumeObj.volume1) < 0.1000) {
+          const date = tomorrowObj.dateAndCode.split('.')[0]
+          const action = todayObj.compareResult[0] === '买' ? '卖' : '买'
           newArr.push({ date, action })
         }
         // 每日后俩个阶段成交方向相同时，判断与平均水平的比较，假定买多还是买少，隔日反向操作

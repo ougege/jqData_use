@@ -30,6 +30,7 @@ https://quant.pobo.net.cn/main#/strategy/editor/54129/0
 # 已保存json需前往比特球-天勤数据下载
 # dealtick vue项目请求所有json并根据策略计算出'买卖标记'
 # 将标记导入tqsdk，进行回测
+https://www.joinquant.com/algorithm/index/edit?algorithmId=ea6c465ca56c082fddfe5373438fe32b
 ```
 
 #### 常见问题
