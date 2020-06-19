@@ -46,6 +46,7 @@ export default {
                 // @lowest: 当日最低价, @open_interest:持仓量, @volume:成交量
                 let askObj = { volume1: 0, volume2: 0, volume3: 0, volume4: 0 }
                 let bidObj = { volume1: 0, volume2: 0, volume3: 0, volume4: 0 }
+                let volumeObj = { volume1: 0, volume2: 0, volume3: 0, volume4: 0 }
                 const currentDate = (res[0].datetime).split(' ')[0]
                 const timeObj = that.joinFixedTime(currentDate)
                 for (let i = 0; i < res.length; i++) {
@@ -56,28 +57,33 @@ export default {
                   if (timeObj.time1Start < tempObjSecond && timeObj.time1End > tempObjSecond) {
                     askObj.volume1 += Number(resObj[codeNameArr[0]][codeNameArr[1]].ask_volume1)
                     bidObj.volume1 += Number(resObj[codeNameArr[0]][codeNameArr[1]].bid_volume1)
+                    volumeObj.volume1 += Number(resObj[codeNameArr[0]][codeNameArr[1]].volume)
                   }
                   // 时间段10:00-11:00
                   if (timeObj.time2Start < tempObjSecond && timeObj.time2End > tempObjSecond) {
                     askObj.volume2 += Number(resObj[codeNameArr[0]][codeNameArr[1]].ask_volume1)
                     bidObj.volume2 += Number(resObj[codeNameArr[0]][codeNameArr[1]].bid_volume1)
+                    volumeObj.volume2 += Number(resObj[codeNameArr[0]][codeNameArr[1]].volume)
                   }
                   // 时间段11:00-14:00
                   if (timeObj.time3Start < tempObjSecond && timeObj.time3End > tempObjSecond) {
                     askObj.volume3 += Number(resObj[codeNameArr[0]][codeNameArr[1]].ask_volume1)
                     bidObj.volume3 += Number(resObj[codeNameArr[0]][codeNameArr[1]].bid_volume1)
+                    volumeObj.volume3 += Number(resObj[codeNameArr[0]][codeNameArr[1]].volume)
                   }
                   // 时间段14:00-15:00
                   if (timeObj.time4Start < tempObjSecond && timeObj.time4End > tempObjSecond) {
                     askObj.volume4 += Number(resObj[codeNameArr[0]][codeNameArr[1]].ask_volume1)
                     bidObj.volume4 += Number(resObj[codeNameArr[0]][codeNameArr[1]].bid_volume1)
+                    volumeObj.volume4 += Number(resObj[codeNameArr[0]][codeNameArr[1]].volume)
                   }
                 }
                 askObj = util.calAskBidPercent(askObj)
                 bidObj = util.calAskBidPercent(bidObj)
+                volumeObj = util.calAskBidPercent(volumeObj)
                 const compareResult = that.compareAskBid(askObj, bidObj)
                 const dateAndCode = currentDate + '.' + codeNameArr[1]
-                const wrapObj = { dateAndCode, askObj, bidObj, compareResult }
+                const wrapObj = { dateAndCode, volumeObj, askObj, bidObj, compareResult }
                 resolve(wrapObj)
               }).catch(err => {
                 reject(err)
