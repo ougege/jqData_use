@@ -18,6 +18,8 @@ export default {
   name: 'Home',
   data () {
     return {
+      timeStart: 0,
+      timeEnd: 0 // 统计回测时长
     }
   },
   watch: {},
@@ -29,6 +31,7 @@ export default {
   methods: {
     getList () {
       const that = this
+      that.timeStart = util.newTimeStamp()
       const promiseArr = []
       for (const codeName in timeConfig.mainCodeList) {
         const days = timeConfig.mainCodeList[codeName]
@@ -94,7 +97,8 @@ export default {
         }
       }
       Promise.all(promiseArr).then(function (res) {
-        console.log(res)
+        // console.log(res)
+        that.guess(res)
       })
     },
 
@@ -120,6 +124,24 @@ export default {
         }
       }
       return arr
+    },
+    // 哥德巴赫猜想
+    guess (arr) {
+      const that = this
+      const newArr = []
+      for (let i = 0; i < arr.length; i++) {
+        const dayObj = arr[i]
+        // 每日第一阶段成交萎靡时，隔日反向操作
+        if (Number(dayObj.volumeObj.volume1) < 0.1000) {
+          const date = dayObj.dateAndCode.split('.')[0]
+          const action = dayObj.compareResult[0] === '买' ? '卖' : '买'
+          newArr.push({ date, action })
+        }
+        // 每日后俩个阶段成交方向相同时，判断与平均水平的比较，假定买多还是买少，隔日反向操作
+      }
+      that.timeEnd = util.newTimeStamp()
+      console.log('回测所用时间:' + (that.timeEnd - that.timeStart))
+      console.log(JSON.stringify(newArr))
     }
   }
 }
