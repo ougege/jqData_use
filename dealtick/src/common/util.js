@@ -200,6 +200,50 @@ const util = {
       obj[j] = (obj[j] / sum).toFixed(4)
     }
     return obj
+  },
+  // 查找俩个数组对象中唯一的项
+  // {"date":"2019-07-16","action":"卖"}
+  findOnlyValue (arr1, arr2, type) {
+    const newArr = []
+    const commonIdx = []
+    const arr1Attr = []
+    // 找出数组1目标属性值
+    arr1.forEach(item => {
+      arr1Attr.push(item[type])
+    })
+    // 找出2个数组中的公共部分
+    arr2.forEach(item => {
+      if (arr1Attr.includes(item[type])) {
+        commonIdx.push(item[type])
+      }
+    })
+    // 遍历数组1和数组2,拿到新数组
+    arr1.forEach(item => {
+      if (!commonIdx.includes(item[type])) {
+        newArr.push(item)
+      }
+    })
+    arr2.forEach(item => {
+      if (!commonIdx.includes(item[type])) {
+        newArr.push(item)
+      }
+    })
+    return newArr
+  },
+  findSameValue (arr1, arr2, type) {
+    const commonIdx = []
+    const arr1Attr = []
+    // 找出数组1目标属性值
+    arr1.forEach(item => {
+      arr1Attr.push(item[type])
+    })
+    // 找出2个数组中的公共部分
+    arr2.forEach(item => {
+      if (arr1Attr.includes(item[type])) {
+        commonIdx.push(item[type])
+      }
+    })
+    return commonIdx
   }
 }
 

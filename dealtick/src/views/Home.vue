@@ -56,7 +56,6 @@ export default {
                 for (let i = 0; i < res.length; i++) {
                   const resObj = res[i]
                   const tempObjSecond = util.newTimeStamp(resObj.datetime)
-                  // debugger
                   // 时间段09:00-10:00
                   if (timeObj.time1Start < tempObjSecond && timeObj.time1End > tempObjSecond) {
                     askObj.volume1 += Number(resObj[codeNameArr[0]][codeNameArr[1]].ask_volume1)
@@ -99,7 +98,7 @@ export default {
       }
       Promise.all(promiseArr).then(function (res) {
         console.log(res)
-        that.guess(res)
+        that.guseemany(res)
       })
     },
 
@@ -129,10 +128,21 @@ export default {
     // 哥德巴赫猜想
     guess (arr) {
       const that = this
-      const newArr = strategy.fn_12(arr)
-      // 每日后俩个阶段成交方向相同时，判断与平均水平的比较，假定买多还是买少，隔日反向操作
+      const newArr = strategy.fn_16(arr)
       that.timeEnd = util.newTimeStamp()
       console.log('回测所用时间:' + (that.timeEnd - that.timeStart))
+      console.log(JSON.stringify(newArr))
+    },
+    // 多个猜想
+    guseemany (arr) {
+      // 回报在10%以上的策略
+      const goodFn = ['fn_2', 'fn_3', 'fn_6', 'fn_10', 'fn_11', 'fn_14']
+      const newArr = []
+      goodFn.forEach(type => {
+        newArr.push(...strategy[type](arr))
+      })
+      newArr.sort(function (a, b) { return util.newTimeStamp(a.date) - util.newTimeStamp(b.date) })
+      // // 回测为负,说明相同的盈利部分被筛选出去了
       console.log(JSON.stringify(newArr))
     }
   }
