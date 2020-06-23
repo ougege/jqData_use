@@ -244,7 +244,30 @@ const util = {
       }
     })
     return commonIdx
-  }
+  },
+  // 比较买卖盘比例,简单标记‘卖', '买'
+  compareAskBid (askObj, bidObj) {
+    const arr = []
+    for (let d = 0; d < new Array(4).length; d++) {
+      if (Number(askObj['volume' + (d + 1)]) > Number(bidObj['volume' + (d + 1)])) {
+        arr.push('卖')
+      } else {
+        arr.push('买')
+      }
+    }
+    return arr
+  },
+  // 传入timeCut对象,生成符合固定时间段对象
+  joinFixedTime (currentDate, hourCutArr) {
+    let idx = 1
+    const obj = {}
+    hourCutArr.forEach(item => {
+      obj['time' + idx + 'Start'] = this.newTimeStamp(currentDate + item.hourStart)
+      obj['time' + idx + 'End'] = this.newTimeStamp(currentDate + item.hourEnd)
+      idx++
+    })
+    return obj
+  },
 }
 
 module.exports = util

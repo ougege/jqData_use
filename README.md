@@ -28,12 +28,13 @@ https://quant.pobo.net.cn/main#/strategy/editor/54126/0
 https://quant.pobo.net.cn/main#/strategy/editor/54129/0
 # dealtick/src/common/trans.js node截取并存储每个交易日对应主力合约的json
 # 已保存json需前往比特球-天勤数据下载
-# dealtick vue项目请求所有json并根据策略计算出'买卖标记'
+# dealtick node处理所有json并根据策略计算出'买卖标记'
 # 将标记导入tqsdk，进行回测
 https://www.joinquant.com/algorithm/index/edit?algorithmId=ea6c465ca56c082fddfe5373438fe32b
 ```
 
 #### 策略统计
+统计区间 2016-09-01 至 2020-06-01
 策略|盈利次数|亏损次数|次数|交易日|收益|
 --|:--:|:--:|:--:|:--:|--:|
 fn_1|19|16|35|252|11.23%|

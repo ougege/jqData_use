@@ -25,7 +25,7 @@ export default {
   },
   watch: {},
   mounted () {
-    this.getList()
+    // this.getList()
   },
   created () {
   },
@@ -97,8 +97,8 @@ export default {
         }
       }
       Promise.all(promiseArr).then(function (res) {
-        console.log(res)
-        that.guseemany(res)
+        that.guess(res)
+        // that.guseemany(res)
       })
     },
 
@@ -128,7 +128,7 @@ export default {
     // 哥德巴赫猜想
     guess (arr) {
       const that = this
-      const newArr = strategy.fn_16(arr)
+      const newArr = strategy.fn_2(arr)
       that.timeEnd = util.newTimeStamp()
       console.log('回测所用时间:' + (that.timeEnd - that.timeStart))
       console.log(JSON.stringify(newArr))
