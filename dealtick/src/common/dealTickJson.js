@@ -5,41 +5,78 @@ const fs = require('fs')
 const { resolve } = require('path')
 
 
+// 第一步：寻找出符合strategy的策略
+const firstStep = false
+// 第二步:拼合所有优质策略,去聚宽回测
+const secondStep = true
 let timeStart = util.newTimeStamp()
-const promiseArr = []
+if (firstStep) {
+    const promiseArr = []
+    for (const codeName in timeConfig.mainCodeList) {
+        const days = timeConfig.mainCodeList[codeName]
+        for (var k = 0; k < days.length; k++) {
+            const url = '../../public/static/data/' + codeName + '.' + days[k] + '.json'
+            const codeNameArr = codeName.split('.')
+            promiseArr.push(
+                new Promise((resolve, reject) => {
+                    fs.readFile(url, 'utf8', function (err, data) {
+                        if (err) {
+                            reject(err)
+                        }
+                        let wrapObj = dealResData(data, codeNameArr)
+                        resolve(wrapObj)
+                    })
+                })
+            )
+        }
+    }
+    Promise.all(promiseArr).then(function (res) {
+        let fnType = 'fn_16'
+        let resData =  guess(res, fnType)
+        // 将结果写入tickStrategy.json
+        fs.writeFile('../../public/static/tickStrategy.' + fnType + '.json', JSON.stringify(resData), 'utf8', function(err) {
+            if (err) {
+                console.log('写文件出错, 错误是:' + err)
+            } else {
+                console.log('成功')
+            }
+        })
+    })
+}
 
-for (const codeName in timeConfig.mainCodeList) {
-    const days = timeConfig.mainCodeList[codeName]
-    for (var k = 0; k < days.length; k++) {
-        const url = '../../public/static/data/' + codeName + '.' + days[k] + '.json'
-        const codeNameArr = codeName.split('.')
+if (secondStep) {
+    // 回报在10%以上的策略
+    const goodFn = ['fn_3', 'fn_7', 'fn_8', 'fn_9', 'fn_11', 'fn_14']
+    const promiseArr = []
+    for (var k = 0; k < goodFn.length; k++) {
+        const url = '../../public/static/tickStrategy.' + goodFn[k] + '.json'
+        // console.log(url)
         promiseArr.push(
             new Promise((resolve, reject) => {
                 fs.readFile(url, 'utf8', function (err, data) {
                     if (err) {
                         reject(err)
                     }
-                    let wrapObj = dealResData(data, codeNameArr)
-                    resolve(wrapObj)
+                    resolve(data)
                 })
             })
         )
     }
-}
-
-Promise.all(promiseArr).then(function (res) {
-    let fnType = 'fn_16'
-    let resData =  guess(res, fnType)
-    // let resData =  guseemany(res)
-    // 将结果写入tickStrategy.json
-    fs.writeFile('../../public/static/tickStrategy.' + fnType + '.json', JSON.stringify(resData), 'utf8', function(err) {
-        if (err) {
-            console.log('写文件出错, 错误是:' + err)
-        } else {
-            console.log('成功')
+    Promise.all(promiseArr).then(function (res) {
+        let newArr = []
+        for (let i = 0; i < res.length; i++) {
+            newArr.push(...JSON.parse(res[i]))
         }
+        // 将结果写入tickStrategyTotal.json
+        fs.writeFile('../../public/static/tickStrategyTotal.json', JSON.stringify(newArr), 'utf8', function(err) {
+            if (err) {
+                console.log('写文件出错, 错误是:' + err)
+            } else {
+                console.log('成功')
+            }
+        })
     })
-})
+}
 
 
 // 处理res
@@ -102,8 +139,6 @@ function guess (arr, fnType) {
 }
 // 多个猜想
 function  guseemany (arr) {
-    // 回报在10%以上的策略
-    const goodFn = ['fn_2', 'fn_3', 'fn_6', 'fn_10', 'fn_11', 'fn_14']
     const newArr = []
     goodFn.forEach(type => {
       newArr.push(...strategy[type](arr))
