@@ -1,3 +1,4 @@
+// 交易日期对象
 const timeCut = [
   { hourStart: ' 08:58:59', hourEnd: ' 09:59:59' },
   { hourStart: ' 10:00:00', hourEnd: ' 10:59:59' },

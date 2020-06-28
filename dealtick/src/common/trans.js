@@ -1,3 +1,4 @@
+// 处理tick,生成满足strategy的json
 const csv = require('csvtojson')
 const util = require('./util')
 const timeConfig = require('./timeConfig')

@@ -1,3 +1,4 @@
+// 处理所有tickStrategy的json，筛选比较出优质策略
 const strategy = require('./strategy')
 const timeConfig = require('./timeConfig')
 const util = require('../common/util')

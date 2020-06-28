@@ -1,3 +1,4 @@
+// 封装交易策略的对象
 const strategy = {
   commonBuySellType (arr, status, type) {
     const newArr = []

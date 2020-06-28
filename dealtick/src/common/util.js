@@ -1,4 +1,4 @@
-// import { type } from './type'
+// 通用的方法
 const config = require('./config')
 const type = require('./type')
 

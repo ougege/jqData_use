@@ -1,3 +1,4 @@
+// 封装的判断js变量类型的class
 class Type {
   constructor (value) {
     this.typeList = ['Null', 'Undefined', 'Object', 'Array', 'String', 'Number', 'Boolean', 'Function', 'RegExp', 'Date']
