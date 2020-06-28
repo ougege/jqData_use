@@ -7,9 +7,9 @@ const { resolve } = require('path')
 
 
 // 第一步：寻找出符合strategy的策略
-const firstStep = false
+const firstStep = true
 // 第二步:拼合所有优质策略,去聚宽回测
-const secondStep = true
+const secondStep = false
 let timeStart = util.newTimeStamp()
 if (firstStep) {
     const promiseArr = []
@@ -32,8 +32,9 @@ if (firstStep) {
         }
     }
     Promise.all(promiseArr).then(function (res) {
-        let fnType = 'fn_16'
-        let resData =  guess(res, fnType)
+        let fnType = 'no_fn'
+        // let resData =  guess(res, fnType)
+        let resData = res
         // 将结果写入tickStrategy.json
         fs.writeFile('../../public/static/tickStrategy.' + fnType + '.json', JSON.stringify(resData), 'utf8', function(err) {
             if (err) {
