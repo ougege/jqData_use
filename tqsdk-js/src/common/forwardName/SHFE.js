@@ -1,3 +1,4 @@
+// 上海期货交易所
 const SHFE = [
   'huangjin', // 黄金
   'baiyin', // 白银

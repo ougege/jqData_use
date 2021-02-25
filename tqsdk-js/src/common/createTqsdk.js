@@ -1,12 +1,10 @@
 import TQSDK from 'tqsdk'
 import Bus from './eventBus'
-// import { config } from './config'
-const config = require('./config')
+import config from './config'
 class CreateTqsdk {
   constructor () {
     this.init()
   }
-
   init () {
     const account = {
       bid: config.bid,
@@ -32,4 +30,4 @@ class CreateTqsdk {
   }
 }
 const createTqsdk = new CreateTqsdk()
-export { createTqsdk }
+export default createTqsdk
