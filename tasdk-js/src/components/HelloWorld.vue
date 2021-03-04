@@ -5,7 +5,8 @@
 </template>
 
 <script>
-import { forwardArr, createTqsdk, config } from '../common/index'
+import TQSDK from 'tqsdk'
+// import { forwardArr, config } from '../common/index'
 export default {
   data () {
     return {
@@ -15,9 +16,14 @@ export default {
   onLoad () {},
   created () {},
   mounted () {
-    console.log(forwardArr)
-    console.log(createTqsdk)
-    console.log(config)
+    // console.log(forwardArr)
+    // console.log(createTqsdk)
+    // console.log(config)
+    const tqsdk = new TQSDK({autoInit: true}) // 等价于 const tqsdk = new TQSDK()
+    tqsdk.on('ready', function () {
+      // eslint-disable-next-line
+      console.log(tqsdk.getQuote('DCE.jd2105'))
+    })
   },
   onShow () {},
   onReady () {},

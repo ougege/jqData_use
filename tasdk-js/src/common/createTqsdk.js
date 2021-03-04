@@ -30,4 +30,4 @@ class CreateTqsdk {
   }
 }
 const createTqsdk = new CreateTqsdk()
-export default createTqsdk
+export { createTqsdk }
