@@ -1,6 +1,9 @@
 ## jqData_use
 本地使用 `jqData`
 
+#### 背景
+原设想是使用js开发的，好上手写策略回测，可是现实很残酷，在使用了tqsdk-js后，发现api残缺不全，比python版tqsdk差的不是一点半点,而且考虑到后期需要本地缓存数据，最终选用了akshare
+
 #### 文档说明
 [JQData-本地量化数据说明书](https://www.joinquant.com/help/api/help?name=JQData 'JQData-本地量化数据说明书')
 
@@ -9,6 +12,8 @@
 [真格文档](https://quant.pobo.net.cn/doc?name=api '真格文档')
 
 [tqsdk-js文档（不完善，接口没数据）](https://github.com/shinnytech/tqsdk-js 'tqsdk-js文档')
+
+[akshare文档](https://www.akshare.xyz/zh_CN/latest/index.html 'akshare文档')
 
 
 #### 交易市场
