@@ -20,3 +20,38 @@ Pandas 可以通过多个属性访问元数据:
 pd.set_option('compute.use_bottleneck', False)
 pd.set_option('compute.use_numexpr', False)
 ```
+
+#### 匹配/广播机制
+1. df.iloc[1] (取每行下标为1的数据)
+1. df['two'] (取每列下标为two的数据)
+1. df.sub(row, axis='columns') (查找数据帧row和其他逐元素的减法,axis即轴)
+1. df.copy() (拷贝)
+1. divmod() (接收两个数字类型（非复数）参数，返回一个包含商和余数的元组)
+1. df + df1 = df.add(df2, fill_value=0) (加法)
+
+#### 比较操作
+序号|缩写|英文|中文
+--|:--:|:--:|--:
+1|eq|equal to|等于
+2|ne|not equal to|不等于
+3|lt|less than|小于
+4|gt|greater than|大于
+5|le|less than or equal to|小于等于
+6|ge|greater than or equal to|大于等于
+
+#### 布尔简化
+1. df.empty (验证Pandas对象是否为空)
+1. df.bool() (验证单元素pandas对象的布尔值)
+
+#### 合并重叠数据集
+1. df1.combine_first(df2) (df2并入df1)
+
+#### DataFrame通用合并方法
+```python
+def combiner(x, y):
+  return np.where(pd.isna(x), y, x)
+```
+
+#### 描述性统计
+1. df.sum() (求和)
+1. df.mean() (求平均值,0是列)
