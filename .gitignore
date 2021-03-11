@@ -11,6 +11,7 @@ Desktop.ini
 .vscode
 # 文件忽略
 *.csv
+*.tsv
 node_modules/
 unpackage/
 dist/
